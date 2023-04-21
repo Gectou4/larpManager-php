@@ -3,6 +3,8 @@ version: "2.2"
 services:
   larpmdbmysql:
     image: mariadb:10.5.12
+    ports:
+      - "30200:3306"
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: password
