@@ -21,7 +21,10 @@ class GroupeGn extends BaseGroupeGn
 {
     public function __construct()
     {
-
+        $this->agents ??= 0;
+        $this->sieges ??= 0;
+        $this->initiative ??= 0;
+        $this->bateaux ??= 0;
     }
 
     /**

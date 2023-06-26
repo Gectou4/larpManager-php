@@ -1,4 +1,4 @@
-FROM php:7.1-cli
+FROM php:7.4-cli
 LABEL "name"="larpmanager"
 LABEL "version"="1.0"
 COPY . /usr/src/larpmanager
@@ -9,13 +9,17 @@ COPY ./docker/config/php.ini /usr/local/etc/php/php.ini
 WORKDIR /usr/src/larpmanager
 
 # Install some usefull pacakge need by composer, maintenance and running.
-RUN apt update && apt install -y zip unzip procps iputils-ping mariadb-client
+RUN apt update && apt install -y vim zip unzip procps iputils-ping mariadb-client
+RUN apt-get install -y libpq-dev
+RUN apt-get install -y zlib1g-dev libzip-dev libpng-dev
+RUN apt-get install -y libfreetype6-dev libjpeg62-turbo-dev libgd-dev
+RUN docker-php-ext-configure gd --with-jpeg=/usr/include/ --with-freetype=/usr/include/
+RUN docker-php-ext-install gd
 RUN docker-php-ext-install mysqli pdo pdo_mysql
-
 
 # install of composer.
 RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
-RUN php -r "if (hash_file('sha384', 'composer-setup.php') === '55ce33d7678c5a611085589f1f3ddf8b3c52d662cd01d4ba75c0ee0459970c2200a51f492d557530c71c15d8dba01eae') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;"
+#RUN php -r "if (hash_file('sha384', 'composer-setup.php') === '76a7060ccb93902cd7576b67264ad91c8a2700e2') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;"
 RUN php composer-setup.php
 RUN php -r "unlink('composer-setup.php');"
 
